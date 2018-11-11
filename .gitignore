@@ -6,3 +6,6 @@ result/result.csv
 result/result.html
 
 src/machine.h
+*.o
+test
+test_*
