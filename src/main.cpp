@@ -60,19 +60,35 @@ static void Verify(void(*f)(T*, size_t), const char* test, const char* fname) {
 
     free(p);
 
-    if (std::abs(mean) < 0.01 && std::abs(sd - 1.0) < 0.01 && std::abs(skewness) < 0.01 && std::abs(kurtosis) < 0.01)
+    const bool mean_ok     = (std::abs(mean) < 0.01);
+    const bool sd_ok       = (std::abs(sd - 1.0) < 0.01);
+    const bool skewness_ok = (std::abs(skewness) < 0.01);
+    const bool kurtosis_ok = (std::abs(kurtosis) < 0.01);
+    
+    const bool all_ok = (mean_ok and sd_ok and skewness_ok and kurtosis_ok);
+
+    if (all_ok)
         printf("OK\n");
     else
         printf("Fail\n");
 
     printf(
-        "mean     = % .6f\n"
-        "SD       = % .6f\n"
+        "mean     = % .6f%s\n"
+        "SD       = % .6f%s\n"
         "minimum  = % .6f\n"
         "maximum  = % .6f\n"
-        "skewness = % .6f\n"
-        "kurtosis = % .6f\n\n",
-        mean, sd, minimum, maximum, skewness, kurtosis);
+        "skewness = % .6f%s\n"
+        "kurtosis = % .6f%s\n\n",
+        mean,
+        (mean_ok ? "" : " fail"),
+        sd,
+        (sd_ok ? "" : " fail"),
+        minimum,
+        maximum,
+        skewness,
+        (skewness_ok ? "" : " fail"),
+        kurtosis,
+        (kurtosis_ok ? "" : " fail"));
 }
 
 static void VerifyAll() {
